@@ -16,7 +16,6 @@ const Slider = () => {
           navigation={true}
           modules={[Navigation]}
           className="mySwiper"
-          onAutoplay={true}
           loop={true}
         >
           <SwiperSlide>
