@@ -2,22 +2,22 @@ import logo from "../../assets/logo.jpg";
 
 const Footer = () => {
   return (
-    <div className=" md:p-10 p-4 bg-gradient-to-r from-[#3E1B99] to-[#3E1B99E6] mt-10">
+    <div className=" md:p-10 p-4 bg-gradient-to-r from-[#3E1B99] to-[#3E1B99E6] mt-32">
       <footer className=" mb-5 max-w-7xl mx-auto mt-5 text-white px-4 ">
         <div className="footer flex justify-around">
           <nav>
             <h6 className="footer-title">Services</h6>
-            <a className="link link-hover">Branding</a>
-            <a className="link link-hover">Design</a>
-            <a className="link link-hover">Marketing</a>
-            <a className="link link-hover">Advertisement</a>
+            <a className="link link-hover">Online Courses</a>
+            <a className="link link-hover">Virtual Classroom</a>
+            <a className="link link-hover">Tutorial Videos</a>
+            <a className="link link-hover">Student Showcase</a>
           </nav>
           <nav>
             <h6 className="footer-title">Company</h6>
-            <a className="link link-hover">About us</a>
+            <a href="/about" className="link link-hover">
+              About us
+            </a>
             <a className="link link-hover">Contact</a>
-            <a className="link link-hover">Jobs</a>
-            <a className="link link-hover">Press kit</a>
           </nav>
           <nav>
             <h6 className="footer-title">Legal</h6>
@@ -28,7 +28,7 @@ const Footer = () => {
         </div>
       </footer>
 
-      <footer className="mt-5 footer md:px-20 px-5 py-4  border-t bg-base-200 text-base-content flex justify-between items-center border-base-300 max-w-7xl mx-auto ">
+      <footer className="mt-8 footer md:px-20 px-5 py-4  border-t bg-base-200 text-base-content flex justify-between items-center border-base-300 max-w-7xl mx-auto ">
         <aside className="items-center grid-flow-col">
           <img className="md:w-10 md:h-10 w-9 h-9" src={logo} alt="" />
           <a className=" md:text-3xl font-bold">Meson</a>
@@ -46,7 +46,11 @@ const Footer = () => {
                 <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
               </svg>
             </a>
-            <a>
+            <a
+              className="cursor-pointer"
+              target="_blank"
+              href="https://www.youtube.com/@mesonacademy"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

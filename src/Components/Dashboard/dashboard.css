@@ -1,0 +1,7 @@
+#menu-dashboard a.active {
+  color: #ffd166;
+
+  font-weight: 700;
+
+  background: none;
+}

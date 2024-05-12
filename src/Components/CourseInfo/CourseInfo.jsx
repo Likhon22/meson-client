@@ -4,6 +4,7 @@ import { getCourses } from "../../Utils/course";
 import Container from "../Container/Container";
 import CourseCard from "../CourseCard/CourseCard";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import { Link } from "react-router-dom";
 
 const CourseInfo = () => {
   const { data: courses = [] } = useQuery({
@@ -20,9 +21,11 @@ const CourseInfo = () => {
           <CourseCard courseInfo={course}></CourseCard>
         ))}
       </div>
-      <div className="flex justify-center ">
-        <PrimaryButton text={"See all"}></PrimaryButton>
-      </div>
+      <Link to={"/all-courses"}>
+        <div className="flex justify-center ">
+          <PrimaryButton text={"See all"}></PrimaryButton>
+        </div>
+      </Link>
     </Container>
   );
 };

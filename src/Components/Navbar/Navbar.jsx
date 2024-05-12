@@ -2,16 +2,27 @@ import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 
 import Container from "../Container/Container";
+import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const [role] = useRole();
+  console.log(role);
   const links = (
     <>
       <li>
         <NavLink to={"/"}>Home</NavLink>
       </li>
       <li>
-        <NavLink to={"/courses"}>Courses</NavLink>
+        <NavLink to={"/all-courses"}>Courses</NavLink>
       </li>
+      {role === "admin" && (
+        <li>
+          <NavLink to={"/dashboard"}>Dashboard</NavLink>
+        </li>
+      )}
+
       <li>
         <NavLink to={"/about"}>About</NavLink>
       </li>
@@ -46,7 +57,7 @@ const Navbar = () => {
               <ul
                 tabIndex={0}
                 id="menu"
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100  rounded-box w-52"
+                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-black  rounded-box w-52"
               >
                 {links}
               </ul>
@@ -54,12 +65,21 @@ const Navbar = () => {
             <a className="btn btn-ghost text-xl">Meson</a>
           </div>
           <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-2 gap-4" id="menu">
+            <ul className="menu menu-horizontal px-2 gap-4 " id="menu">
               {links}
             </ul>
           </div>
           <div className="navbar-end">
-            <a className="btn">Button</a>
+            {!user ? (
+              <Link to={"/login"}>
+                {" "}
+                <button className="btn">Login</button>
+              </Link>
+            ) : (
+              <button onClick={() => logout()} className="btn">
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </Container>

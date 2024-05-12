@@ -5,10 +5,10 @@ const CourseCard = ({ courseInfo }) => {
   console.log(courseInfo);
 
   return (
-    <div className="border border-[#FBC251] bg-[#FBC25112] border-dotted p-5 rounded-lg mt-16 ">
+    <div className="border border-[#6d6b69] bg-[#FBC25112] border-dotted p-5 rounded-lg mt-16 ">
       <div className=" flex overflow-hidden h-[200px] md:h-[250px] justify-center rounded-lg">
         <img
-          className="w-full h-full rounded-lg object-cover"
+          className="w-full h-full rounded-lg "
           src={courseInfo.image}
           alt=""
         />
