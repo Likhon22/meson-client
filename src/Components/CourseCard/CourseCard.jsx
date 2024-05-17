@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 
-const CourseCard = ({ courseInfo }) => {
+const CourseCard = ({ courseInfo, link = "course-details" }) => {
   console.log(courseInfo);
 
   return (
@@ -18,7 +18,7 @@ const CourseCard = ({ courseInfo }) => {
       </h3>
 
       <div className="my-5">
-        <Link to={`/course-details/${courseInfo._id}`}>
+        <Link to={`/${link}/${courseInfo._id}`}>
           <PrimaryButton text={"See Details"}></PrimaryButton>
         </Link>
       </div>

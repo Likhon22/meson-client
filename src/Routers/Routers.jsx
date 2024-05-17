@@ -9,6 +9,11 @@ import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Dashboard from "../Layout/Dashboard";
 import ManageCourse from "../Pages/Dashboard/ManageCourse/ManageCourse";
+import AddCourse from "../Pages/Dashboard/AddCourse/AddCourse";
+import AddVideos from "../Pages/Dashboard/AddVideos/AddVideos";
+import VideoForm from "../Components/Dashboard/VideoForm.jsx/VideoForm";
+import MyCourses from "./../Pages/MyCourses/MyCourses";
+import CourseVideo from "../Pages/CourseVideo/CourseVideo";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +26,15 @@ const routers = createBrowserRouter([
       {
         path: "/course-details/:id",
         element: <CourseDetails></CourseDetails>,
+        loader: async ({ params }) => await getSingleCourse(params.id),
+      },
+      {
+        path: "/my-courses",
+        element: <MyCourses></MyCourses>,
+      },
+      {
+        path: "/videos/:id",
+        element: <CourseVideo></CourseVideo>,
         loader: async ({ params }) => await getSingleCourse(params.id),
       },
       {
@@ -48,7 +62,21 @@ const routers = createBrowserRouter([
       {
         path: "manage-courses",
         element: <ManageCourse />,
-      }]
+      },
+      {
+        path: "add-courses",
+        element: <AddCourse></AddCourse>,
+      },
+      {
+        path: "add-videos",
+        element: <AddVideos></AddVideos>,
+      },
+      {
+        path: "add-videos/:id",
+        element: <VideoForm></VideoForm>,
+        loader: async ({ params }) => await getSingleCourse(params.id),
+      },
+    ],
   },
 ]);
 export default routers;
