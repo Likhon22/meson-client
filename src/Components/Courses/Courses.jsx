@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getCourses } from "../../Utils/course";
+
 import Container from "../Container/Container";
 import CourseCard from "../CourseCard/CourseCard";
 import Loader from "../Loader/Loader";
+import { getCourses } from "../../Utils/course";
 
 const Courses = () => {
-  const { data: courses = [],isLoading } = useQuery({
+  const { data: courses = [], isLoading } = useQuery({
     queryKey: ["courseInfo"],
     queryFn: async () => {
       return await getCourses();

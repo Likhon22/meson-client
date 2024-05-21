@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import Lottie from "lottie-react";
-
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-import { useNavigate } from "react-router-dom";
 import { uploadImage } from "../../../Utils/uploadFile";
 import Loader from "../../../Components/Loader/Loader";
 import { addCourse } from "../../../Utils/course";
+
 const AddCourse = () => {
   const categories = [
     "gk",
@@ -17,8 +14,7 @@ const AddCourse = () => {
     "english",
     "bangla",
   ];
-  const type = ["quiz", "masterclass"];
-  const [selectedType, setSelectedType] = useState(type[1]);
+
   const [selectedCategory, setSelectedCategory] = useState(categories[1]);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +27,7 @@ const AddCourse = () => {
     const image = await uploadImage("image", imageData);
     const description = form.description.value;
     const fee = form.fee.value;
-    const type = selectedType;
+    const type = form.type.value;
     const category = selectedCategory;
     let content = [];
     const version = "paid";
@@ -45,10 +41,12 @@ const AddCourse = () => {
       content,
       version,
     };
+    console.log(courseInfo);
     try {
-      console.log(courseInfo);
       const response = await addCourse(courseInfo);
       setLoading(false);
+
+      setSelectedCategory(categories[1]); // Reset selectedCategory to default
       form.reset();
       toast.success("Added Successfully");
     } catch (err) {
@@ -57,24 +55,24 @@ const AddCourse = () => {
       toast.error(err.message);
     }
   };
+
   return (
-    <div className=" min-h-screen py-20 ">
+    <div className="min-h-screen py-20">
       {loading ? (
-        <Loader></Loader>
+        <Loader />
       ) : (
         <div className="bg-gradient-to-r from-[#3E1B99C7] to-[#3E1B99] w-11/12 lg:w-1/2 mx-auto py-20 rounded-lg">
           <h2 className="text-center text-white text-4xl font-bold mb-4">
-            {" "}
             Add Your Course
           </h2>
-          <form onSubmit={handleSubmit} className="w-9/12 lg:w-1/2 mx-auto  ">
+          <form onSubmit={handleSubmit} className="w-9/12 lg:w-1/2 mx-auto">
             <div className="form-control">
               <label className="label">
                 <span className="text-white">Course Title</span>
               </label>
               <input
                 type="text"
-                placeholder=" Course Name"
+                placeholder="Course Name"
                 name="course_name"
                 className="input input-bordered"
                 required
@@ -93,7 +91,6 @@ const AddCourse = () => {
                 accept="image/*"
               />
             </div>
-
             <div className="form-control">
               <label className="label">
                 <span className="text-white">Course Category</span>
@@ -103,11 +100,8 @@ const AddCourse = () => {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option disabled selected>
-                  Category
-                </option>
-                {categories?.map((category, index) => (
-                  <option key={index} className="uppercase">
+                {categories.map((category, index) => (
+                  <option key={index} value={category} className="uppercase">
                     {category.toUpperCase()}
                   </option>
                 ))}
@@ -117,20 +111,15 @@ const AddCourse = () => {
               <label className="label">
                 <span className="text-white">Type</span>
               </label>
-              <select
-                className="select select-bordered w-full"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-              >
-                <option disabled selected>
-                  Type
-                </option>
-                {type?.map((type, index) => (
-                  <option key={index} className="uppercase">
-                    {type.toUpperCase()}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                placeholder="Type"
+                name="type"
+                defaultValue={"Master class"}
+                readOnly
+                className="input input-bordered"
+                required
+              />
             </div>
             <div className="form-control">
               <label className="label">
@@ -138,7 +127,7 @@ const AddCourse = () => {
               </label>
               <input
                 type="number"
-                placeholder=" Fee"
+                placeholder="Fee"
                 name="fee"
                 min={0}
                 className="input input-bordered"

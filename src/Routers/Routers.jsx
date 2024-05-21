@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../Pages/Home/Home";
 import Main from "../Layout/Main";
 import CourseDetails from "../Pages/CourseDetails/CourseDetails";
-import { getSingleCourse } from "../Utils/course";
+
 import Courses from "../Components/Courses/Courses";
 import About from "../Pages/About/About";
 import Login from "../Pages/Login/Login";
@@ -14,6 +14,9 @@ import AddVideos from "../Pages/Dashboard/AddVideos/AddVideos";
 import VideoForm from "../Components/Dashboard/VideoForm.jsx/VideoForm";
 import MyCourses from "./../Pages/MyCourses/MyCourses";
 import CourseVideo from "../Pages/CourseVideo/CourseVideo";
+import { getSingleCourse } from "../Utils/course";
+import AddQuiz from "./../Pages/Dashboard/AddQuiz/AddQuiz";
+import QuizForm from "../Pages/Dashboard/QuizForm/QuizForm";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -64,7 +67,7 @@ const routers = createBrowserRouter([
         element: <ManageCourse />,
       },
       {
-        path: "add-courses",
+        path: "add-videos/add-courses",
         element: <AddCourse></AddCourse>,
       },
       {
@@ -75,6 +78,14 @@ const routers = createBrowserRouter([
         path: "add-videos/:id",
         element: <VideoForm></VideoForm>,
         loader: async ({ params }) => await getSingleCourse(params.id),
+      },
+      {
+        path: "add-quiz",
+        element: <AddQuiz></AddQuiz>,
+      },
+      {
+        path: "add-quiz/exam/add",
+        element: <QuizForm></QuizForm>,
       },
     ],
   },

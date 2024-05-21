@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { uploadVideo } from "../../../Utils/uploadFile";
 import videJson from "../../../assets/video.json";
 import Lottie from "lottie-react";
@@ -10,6 +10,7 @@ import Loader from "../../Loader/Loader";
 const VideoForm = () => {
   const course = useLoaderData();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,6 +26,7 @@ const VideoForm = () => {
     try {
       const response = await addVideo(videoInfo, course?._id);
       setLoading(false);
+      navigate("/dashboard/add-videos");
       toast.success("Video added successfully");
     } catch (err) {
       console.log(err);

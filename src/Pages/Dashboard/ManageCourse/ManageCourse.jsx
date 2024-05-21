@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getCourses } from "../../../Utils/course";
+
 import DashboardContainer from "../../../Components/Dashboard/DashboardContainer/DashboardContainer";
 import DashboardHeadingText from "../../../Text/DashboardHeadingText/DashboardHeadingText";
 import ManageCourseTable from "../../../Table/ManageCourseTable/ManageCourseTable";
+import { getVideoCourses } from "../../../Utils/course";
 
 const ManageCourse = () => {
   const {
@@ -12,7 +13,7 @@ const ManageCourse = () => {
     refetch,
   } = useQuery({
     queryKey: ["courses"],
-    queryFn: () => getCourses(),
+    queryFn: async () => await getVideoCourses(),
   });
   return (
     <DashboardContainer>

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getCourses } from "../../Utils/course";
+
 import Container from "../../Components/Container/Container";
 import CourseCard from "../../Components/CourseCard/CourseCard";
+import { getCourses, } from "../../Utils/course";
 
 const MyCourses = () => {
   const { data: courses = [] } = useQuery({

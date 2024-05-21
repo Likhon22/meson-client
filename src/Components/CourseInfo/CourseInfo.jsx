@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { getCourses } from "../../Utils/course";
+
 import Container from "../Container/Container";
 import CourseCard from "../CourseCard/CourseCard";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import { Link } from "react-router-dom";
+import { getCourses } from "../../Utils/course";
 
 const CourseInfo = () => {
   const { data: courses = [] } = useQuery({

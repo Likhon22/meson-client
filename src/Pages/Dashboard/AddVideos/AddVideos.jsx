@@ -1,11 +1,12 @@
 import React from "react";
 import DashboardContainer from "../../../Components/Dashboard/DashboardContainer/DashboardContainer";
 import { useQuery } from "@tanstack/react-query";
-import { getCourses } from "../../../Utils/course";
-import ManageCourseTable from "./../../../Table/ManageCourseTable/ManageCourseTable";
+
 import DashboardHeadingText from "./../../../Text/DashboardHeadingText/DashboardHeadingText";
-import { MdDelete } from "react-icons/md";
+
 import { Link } from "react-router-dom";
+import { getVideoCourses } from "../../../Utils/course";
+
 const AddVideos = () => {
   const {
     data: courses = [],
@@ -13,7 +14,7 @@ const AddVideos = () => {
     refetch,
   } = useQuery({
     queryKey: ["courses"],
-    queryFn: () => getCourses(),
+    queryFn: async () => await getVideoCourses(),
   });
   return (
     <DashboardContainer>
@@ -24,9 +25,16 @@ const AddVideos = () => {
             "Oversee and Add the courses on the platform to maintain quality standards."
           }
         ></DashboardHeadingText>
-        <h3 className="mt-6 mb-8 font-bold text-lg">
-          Total courses:{courses?.length}
-        </h3>
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="mt-6 mb-8 font-bold text-lg">
+            Total courses:{courses?.length}
+          </h3>
+          <Link to={`/dashboard/add-videos/add-courses`}>
+            <button className="btn btn-sm bg-gray-900 text-white border-none hover:bg-gray-700">
+              Add MasterClass
+            </button>
+          </Link>
+        </div>
         <div className="overflow-x-auto">
           <table className="table">
             {/* head */}

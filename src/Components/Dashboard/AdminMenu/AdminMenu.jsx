@@ -6,11 +6,12 @@ const AdminMenu = () => {
       <div>
         <NavLink to={"/dashboard/admin-profile"}>Admin Profile</NavLink>
       </div>
-      <div>
-        <NavLink to={"/dashboard/add-courses"}>Add Course</NavLink>
-      </div>
+
       <div>
         <NavLink to={"/dashboard/add-videos"}>Add Videos</NavLink>
+      </div>
+      <div>
+        <NavLink to={"/dashboard/add-quiz"}>Add Quiz</NavLink>
       </div>
       <div>
         <NavLink to={"/dashboard/manage-courses"}>Manage Courses</NavLink>
