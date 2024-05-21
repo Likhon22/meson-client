@@ -23,12 +23,9 @@ export const getAllExams = async () => {
 
 // get exam by id
 
-export const getExamById = async (payload) => {
+export const getExamById = async (id) => {
   try {
-    const response = await axiosSecure.post(
-      "/api/exams/get-exam-by-id",
-      payload
-    );
+    const response = await axiosSecure.get(`/api/exams/get-exam-by-id/${id}`);
     return response.data;
   } catch (error) {
     return error.response.data;

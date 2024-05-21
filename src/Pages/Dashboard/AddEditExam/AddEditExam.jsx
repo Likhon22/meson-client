@@ -1,0 +1,290 @@
+import { Col, Form, message, Row, Select, Table, Button } from "antd";
+import React, { useEffect, useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Tabs } from "antd";
+import {
+  addExam,
+  deleteQuestionById,
+  editExamById,
+  getExamById,
+} from "../../../Utils/exam";
+import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
+import AddEditQuestion from "../../../Components/AddEditQuestion/AddEditQuestion";
+import DashboardContainer from "../../../Components/Dashboard/DashboardContainer/DashboardContainer";
+
+const { TabPane } = Tabs;
+const { Option } = Select;
+
+function AddEditExam() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [examData, setExamData] = useState(null);
+  const [showAddEditQuestionModal, setShowAddEditQuestionModal] =
+    useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const params = useParams();
+
+  const onFinish = async (values) => {
+    console.log(values);
+    try {
+      dispatch(ShowLoading());
+      let response;
+
+      if (params.id) {
+        response = await editExamById({
+          ...values,
+          examId: params.id,
+        });
+      } else {
+        response = await addExam(values);
+      }
+      if (response.success) {
+        message.success(response.message);
+        navigate("/admin/exams");
+      } else {
+        message.error(response.message);
+      }
+      dispatch(HideLoading());
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
+
+  const getExamData = useCallback(async () => {
+    try {
+      dispatch(ShowLoading());
+      const response = await getExamById(params?.id);
+      console.log(response);
+      dispatch(HideLoading());
+      if (response) {
+        setExamData(response);
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  }, [dispatch, params?.id]);
+
+  useEffect(() => {
+    if (params.id) {
+      getExamData(); // line 74
+      console.log(examData);
+    }
+  }, [params.id]);
+
+  const deleteQuestion = async (questionId) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await deleteQuestionById({
+        questionId,
+        examId: params.id,
+      });
+      dispatch(HideLoading());
+      if (response.success) {
+        message.success(response.message);
+        getExamData();
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
+
+  const questionsColumns = [
+    {
+      title: "Question",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Options",
+      dataIndex: "options",
+      key: "options",
+      render: (text, record) => (
+        <>
+          {Object.keys(record.options)?.map((key) => (
+            <div key={key}>
+              {key} : {record.options[key]}
+            </div>
+          ))}
+        </>
+      ),
+    },
+    {
+      title: "Correct Option",
+      dataIndex: "correctOption",
+      key: "correctOption",
+      render: (text, record) =>
+        ` ${record.correctOption} : ${record.options[record.correctOption]}`,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (text, record) => (
+        <div className="flex gap-2">
+          <i
+            className="ri-pencil-line"
+            onClick={() => {
+              setSelectedQuestion(record);
+              setShowAddEditQuestionModal(true);
+            }}
+          ></i>
+          <i
+            className="ri-delete-bin-line"
+            onClick={() => deleteQuestion(record._id)}
+          ></i>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <DashboardContainer>
+      {" "}
+      <div>
+        <div className="divider"></div>
+
+        {(examData || !params.id) && (
+          <Form
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={examData || {}}
+          >
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Exam Details" key="1">
+                <Row gutter={[10, 10]}>
+                  <Col span={8}>
+                    <Form.Item
+                      label="Exam Name"
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter the exam name",
+                        },
+                      ]}
+                    >
+                      <input type="text" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      label="Exam Duration"
+                      name="duration"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter the exam duration",
+                        },
+                      ]}
+                    >
+                      <input type="number" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      label="Category"
+                      name="category"
+                      rules={[
+                        { required: true, message: "Please select a category" },
+                      ]}
+                    >
+                      <Select>
+                        <Option value="">Select Category</Option>
+                        <Option value="Javascript">Javascript</Option>
+                        <Option value="React">React</Option>
+                        <Option value="Node">Node</Option>
+                        <Option value="MongoDB">MongoDB</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      label="Total Marks"
+                      name="totalMarks"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter the total marks",
+                        },
+                      ]}
+                    >
+                      <input type="number" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      label="Passing Marks"
+                      name="passingMarks"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter the passing marks",
+                        },
+                      ]}
+                    >
+                      <input type="number" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    className="primary-outlined-btn"
+                    type="button"
+                    onClick={() => navigate("/admin/exams")}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="primary-contained-btn" type="submit">
+                    Save
+                  </Button>
+                </div>
+              </TabPane>
+              {params.id && (
+                <TabPane tab="Questions" key="2">
+                  <div className="flex justify-end">
+                    <Button
+                      className="primary-outlined-btn"
+                      type="button"
+                      onClick={() => setShowAddEditQuestionModal(true)}
+                    >
+                      Add Question
+                    </Button>
+                  </div>
+
+                  <Table
+                    columns={questionsColumns}
+                    dataSource={examData?.questions?.map((question) => ({
+                      ...question,
+                      key: question._id,
+                    }))}
+                  />
+                </TabPane>
+              )}
+            </Tabs>
+          </Form>
+        )}
+
+        {showAddEditQuestionModal && (
+          <AddEditQuestion
+            setShowAddEditQuestionModal={setShowAddEditQuestionModal}
+            showAddEditQuestionModal={showAddEditQuestionModal}
+            examId={params.id}
+            refreshData={getExamData}
+            selectedQuestion={selectedQuestion}
+            setSelectedQuestion={setSelectedQuestion}
+          />
+        )}
+      </div>
+    </DashboardContainer>
+  );
+}
+
+export default AddEditExam;

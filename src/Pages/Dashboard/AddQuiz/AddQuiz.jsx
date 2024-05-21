@@ -6,6 +6,8 @@ import { deleteExamById, getAllExams } from "../../../Utils/exam";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import DashboardContainer from "../../../Components/Dashboard/DashboardContainer/DashboardContainer";
 import { useQuery } from "@tanstack/react-query";
+import { FaPencilAlt } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const AddQuizzes = () => {
   const navigate = useNavigate();
@@ -61,14 +63,13 @@ const AddQuizzes = () => {
       dataIndex: "action",
       render: (text, record) => (
         <div className="flex gap-2">
-          <i
-            className="ri-pencil-line"
-            onClick={() => navigate(`/dashboard/exams/edit/${record._id}`)}
+          <FaPencilAlt
+            className="cursor-pointer"
+            onClick={() =>
+              navigate(`/dashboard/add-quiz/exams/edit/${record._id}`)
+            }
           />
-          <i
-            className="ri-delete-bin-line"
-            onClick={() => deleteExam(record._id)}
-          />
+          <MdDelete onClick={() => deleteExam(record._id)} />
         </div>
       ),
     },
@@ -79,8 +80,7 @@ const AddQuizzes = () => {
       <div>
         <div className="flex justify-between mt-2 items-end">
           <Link to="/dashboard/add-quiz/exam/add">
-            <button className="primary-outlined-btn flex items-center">
-              <i className="ri-add-line"></i>
+            <button className="btn btn-sm bg-black hover:bg-gray-600 text-white flex items-center">
               Add Exam
             </button>
           </Link>
