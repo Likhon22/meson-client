@@ -30,7 +30,7 @@ export const getVideoCourses = async () => {
   return data.data;
 };
 export const getQuizCourses = async () => {
-  const data = await axiosSecure.get(`/courses/quiz/onlyQuiz`);
+  const data = await axiosSecure.get(`/api/exams/get-all-exams`);
   console.log(data);
   return data.data;
 };

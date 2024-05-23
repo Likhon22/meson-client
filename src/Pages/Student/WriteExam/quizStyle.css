@@ -1,0 +1,12 @@
+.option {
+  box-shadow: rgba(0, 0, 0, 0.638) 0px 0px 1.5px;
+  padding: 10px;
+  border-radius: 2px;
+}
+
+.selected-option {
+  box-shadow: rgba(0, 0, 0, 0.638) 0px 0px 1px;
+  padding: 10px;
+  border-radius: 2px;
+  border: 2px solid #0f3460;
+}

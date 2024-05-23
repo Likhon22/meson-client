@@ -13,7 +13,7 @@ const AddQuizzes = () => {
   const navigate = useNavigate();
   // const [exams, setExams] = useState([]);
   const dispatch = useDispatch();
-  const { data: exams } = useQuery({
+  const { data: exams, refetch } = useQuery({
     queryKey: ["exams"],
     queryFn: async () => {
       return await getAllExams();
@@ -23,11 +23,11 @@ const AddQuizzes = () => {
   const deleteExam = async (examId) => {
     try {
       dispatch(ShowLoading());
-      const response = await deleteExamById({ examId });
+      const response = await deleteExamById(examId);
       dispatch(HideLoading());
-      if (response.success) {
-        message.success(response.message);
-        getExamsData();
+      if (response) {
+        message.success("Deleted Successfully");
+        refetch();
       } else {
         message.error(response.message);
       }
@@ -69,7 +69,10 @@ const AddQuizzes = () => {
               navigate(`/dashboard/add-quiz/exams/edit/${record._id}`)
             }
           />
-          <MdDelete onClick={() => deleteExam(record._id)} />
+          <MdDelete
+            className="cursor-pointer"
+            onClick={() => deleteExam(record._id)}
+          />
         </div>
       ),
     },

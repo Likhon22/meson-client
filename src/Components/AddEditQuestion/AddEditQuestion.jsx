@@ -11,6 +11,7 @@ const AddEditQuestion = ({
   examId,
   selectedQuestion,
   setSelectedQuestion,
+  refetchData,
 }) => {
   const dispatch = useDispatch();
 
@@ -39,8 +40,9 @@ const AddEditQuestion = ({
         response = await addQuestionToExam(payload);
       }
 
-      if (response.success) {
-        message.success(response.message);
+      if (response) {
+        message.success("Successful");
+        refetchData();
         refreshData();
         setShowAddEditQuestionModal(false);
       } else {
@@ -129,13 +131,12 @@ const AddEditQuestion = ({
 
         <div className="flex justify-end mt-2 gap-3">
           <button
-            className="primary-outlined-btn"
-            type="button"
+            className="btn btn-sm bg-black text-white "
             onClick={() => setShowAddEditQuestionModal(false)}
           >
             Cancel
           </button>
-          <button className="primary-contained-btn" type="submit">
+          <button className="btn btn-sm bg-black text-white " type="submit">
             Save
           </button>
         </div>

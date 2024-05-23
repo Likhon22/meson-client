@@ -8,15 +8,19 @@ import {
   deleteQuestionById,
   editExamById,
   getExamById,
+  getQuestionByExamId,
 } from "../../../Utils/exam";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import AddEditQuestion from "../../../Components/AddEditQuestion/AddEditQuestion";
 import DashboardContainer from "../../../Components/Dashboard/DashboardContainer/DashboardContainer";
+import { useQuery } from "@tanstack/react-query";
+import { MdDelete } from "react-icons/md";
+import { FaPencilAlt } from "react-icons/fa";
 
 const { TabPane } = Tabs;
 const { Option } = Select;
-
-function AddEditExam() {
+const categories = ["gk", "physics", "chemistry", "math", "english", "bangla"];
+const AddEditExam = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [examData, setExamData] = useState(null);
@@ -24,24 +28,27 @@ function AddEditExam() {
     useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const params = useParams();
+  const { data: questionData, refetch } = useQuery({
+    queryKey: ["question", params?.id],
+    queryFn: async () => await getQuestionByExamId(params?.id),
+  });
 
   const onFinish = async (values) => {
-    console.log(values);
+    console.log("laskdfjhlsdfj");
     try {
       dispatch(ShowLoading());
       let response;
 
       if (params.id) {
-        response = await editExamById({
-          ...values,
-          examId: params.id,
-        });
+        response = await editExamById(params?.id, { ...values });
       } else {
         response = await addExam(values);
       }
-      if (response.success) {
-        message.success(response.message);
-        navigate("/admin/exams");
+      if (response) {
+        message.success("Succesfull");
+        getExamData();
+        refetch();
+        navigate("/dashbaord/add-quiz");
       } else {
         message.error(response.message);
       }
@@ -56,7 +63,7 @@ function AddEditExam() {
     try {
       dispatch(ShowLoading());
       const response = await getExamById(params?.id);
-      console.log(response);
+
       dispatch(HideLoading());
       if (response) {
         setExamData(response);
@@ -71,22 +78,18 @@ function AddEditExam() {
 
   useEffect(() => {
     if (params.id) {
-      getExamData(); // line 74
-      console.log(examData);
+      getExamData();
     }
-  }, [params.id]);
+  }, [params.id, questionData]);
 
   const deleteQuestion = async (questionId) => {
     try {
       dispatch(ShowLoading());
-      const response = await deleteQuestionById({
-        questionId,
-        examId: params.id,
-      });
+      const response = await deleteQuestionById(questionId, params?.id);
       dispatch(HideLoading());
-      if (response.success) {
-        message.success(response.message);
-        getExamData();
+      if (response) {
+        message.success("Successfully deleted");
+        refetch();
       } else {
         message.error(response.message);
       }
@@ -103,6 +106,13 @@ function AddEditExam() {
       key: "name",
     },
     {
+      title: "Correct Option",
+      dataIndex: "correctOption",
+      key: "correctOption",
+      render: (text, record) =>
+        ` ${record.correctOption} : ${record.options[record.correctOption]}`,
+    },
+    {
       title: "Options",
       dataIndex: "options",
       key: "options",
@@ -116,30 +126,17 @@ function AddEditExam() {
         </>
       ),
     },
-    {
-      title: "Correct Option",
-      dataIndex: "correctOption",
-      key: "correctOption",
-      render: (text, record) =>
-        ` ${record.correctOption} : ${record.options[record.correctOption]}`,
-    },
+
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
       render: (text, record) => (
         <div className="flex gap-2">
-          <i
-            className="ri-pencil-line"
-            onClick={() => {
-              setSelectedQuestion(record);
-              setShowAddEditQuestionModal(true);
-            }}
-          ></i>
-          <i
-            className="ri-delete-bin-line"
+          <MdDelete
+            className="cursor-pointer"
             onClick={() => deleteQuestion(record._id)}
-          ></i>
+          />
         </div>
       ),
     },
@@ -155,7 +152,7 @@ function AddEditExam() {
           <Form
             layout="vertical"
             onFinish={onFinish}
-            initialValues={examData || {}}
+            initialValues={examData && examData.length > 0 ? examData[0] : {}}
           >
             <Tabs defaultActiveKey="1">
               <TabPane tab="Exam Details" key="1">
@@ -171,7 +168,7 @@ function AddEditExam() {
                         },
                       ]}
                     >
-                      <input type="text" />
+                      <input type="text" readOnly />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -185,7 +182,7 @@ function AddEditExam() {
                         },
                       ]}
                     >
-                      <input type="number" />
+                      <input type="number" readOnly />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -193,16 +190,13 @@ function AddEditExam() {
                       label="Category"
                       name="category"
                       rules={[
-                        { required: true, message: "Please select a category" },
+                        {
+                          required: true,
+                          message: "Please enter the exam duration",
+                        },
                       ]}
                     >
-                      <Select>
-                        <Option value="">Select Category</Option>
-                        <Option value="Javascript">Javascript</Option>
-                        <Option value="React">React</Option>
-                        <Option value="Node">Node</Option>
-                        <Option value="MongoDB">MongoDB</Option>
-                      </Select>
+                      <input className="capitalize" type="text" readOnly />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -216,7 +210,7 @@ function AddEditExam() {
                         },
                       ]}
                     >
-                      <input type="number" />
+                      <input type="number" readOnly />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -230,20 +224,17 @@ function AddEditExam() {
                         },
                       ]}
                     >
-                      <input type="number" />
+                      <input type="number" readOnly />
                     </Form.Item>
                   </Col>
                 </Row>
                 <div className="flex justify-end gap-2">
                   <Button
-                    className="primary-outlined-btn"
+                    className="btn btn-sm bg-black text-white "
                     type="button"
-                    onClick={() => navigate("/admin/exams")}
+                    onClick={() => navigate("/dashboard/add-quiz")}
                   >
                     Cancel
-                  </Button>
-                  <Button className="primary-contained-btn" type="submit">
-                    Save
                   </Button>
                 </div>
               </TabPane>
@@ -251,7 +242,7 @@ function AddEditExam() {
                 <TabPane tab="Questions" key="2">
                   <div className="flex justify-end">
                     <Button
-                      className="primary-outlined-btn"
+                      className="btn btn-sm bg-black text-white hover:bg-gray-600"
                       type="button"
                       onClick={() => setShowAddEditQuestionModal(true)}
                     >
@@ -260,8 +251,9 @@ function AddEditExam() {
                   </div>
 
                   <Table
+                    pagination={false}
                     columns={questionsColumns}
-                    dataSource={examData?.questions?.map((question) => ({
+                    dataSource={questionData?.map((question) => ({
                       ...question,
                       key: question._id,
                     }))}
@@ -280,11 +272,12 @@ function AddEditExam() {
             refreshData={getExamData}
             selectedQuestion={selectedQuestion}
             setSelectedQuestion={setSelectedQuestion}
+            refetchData={refetch}
           />
         )}
       </div>
     </DashboardContainer>
   );
-}
+};
 
 export default AddEditExam;

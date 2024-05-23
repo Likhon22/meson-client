@@ -34,10 +34,10 @@ export const getExamById = async (id) => {
 
 // edit exam by id
 
-export const editExamById = async (payload) => {
+export const editExamById = async (id, payload) => {
   try {
-    const response = await axiosSecure.post(
-      "/api/exams/edit-exam-by-id",
+    const response = await axiosSecure.put(
+      `/api/exams/edit-exam-by-id/${id}`,
       payload
     );
     return response.data;
@@ -48,11 +48,10 @@ export const editExamById = async (payload) => {
 
 // delete exam by id
 
-export const deleteExamById = async (payload) => {
+export const deleteExamById = async (id) => {
   try {
-    const response = await axiosSecure.post(
-      "/api/exams/delete-exam-by-id",
-      payload
+    const response = await axiosSecure.delete(
+      `/api/exams/delete-exam-by-id/${id}`
     );
     return response.data;
   } catch (error) {
@@ -86,11 +85,36 @@ export const editQuestionById = async (payload) => {
   }
 };
 
-export const deleteQuestionById = async (payload) => {
+export const deleteQuestionById = async (questionId, examId) => {
+  console.log(questionId, examId);
   try {
-    const response = await axiosSecure.post(
-      "/api/exams/delete-question-in-exam",
-      payload
+    const response = await axiosSecure.delete(
+      `/api/exams/delete-question-in-exam/${questionId}/${examId}`
+    );
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+export const getQuestionByExamId = async (id) => {
+  try {
+    const response = await axiosSecure.get(
+      `/api/exams/get-question-by-exam-id/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const deleteQuestionByIds = async (ids) => {
+  console.log(ids);
+  try {
+    const response = await axiosSecure.delete(
+      "/questions/deletedAfterSubmitted",
+      {
+        data: { ids: ids }, // Send the IDs array under the key 'ids'
+      }
     );
     return response.data;
   } catch (error) {

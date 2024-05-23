@@ -6,7 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import logo from "../../../assets/logo.jpg";
 
 const Sidebar = () => {
-  const [role] = useRole();
+  const [role, isLoading] = useRole();
   const { user } = useAuth();
   return (
     <div className="mt-24 ">

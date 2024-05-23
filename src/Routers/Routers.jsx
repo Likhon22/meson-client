@@ -19,6 +19,7 @@ import AddQuiz from "./../Pages/Dashboard/AddQuiz/AddQuiz";
 import QuizForm from "../Pages/Dashboard/QuizForm/QuizForm";
 import AddEditQuestion from "../Components/AddEditQuestion/AddEditQuestion";
 import AddEditExam from "../Pages/Dashboard/AddEditExam/AddEditExam";
+import WriteExam from "../Pages/Student/WriteExam";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +37,10 @@ const routers = createBrowserRouter([
       {
         path: "/my-courses",
         element: <MyCourses></MyCourses>,
+      },
+      {
+        path: "student-quiz/:id",
+        element: <WriteExam></WriteExam>,
       },
       {
         path: "/videos/:id",
